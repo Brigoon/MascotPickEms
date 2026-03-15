@@ -415,43 +415,64 @@ function renderBracketVisualization() {
   const champMatchupDiv = document.createElement("div");
   champMatchupDiv.className = "championship-matchup";
   
-  // Get the champion (if tournament is done)
+  // Get the two finalists
+  const swKey = matchupKey([finalFour.South, finalFour.West]);
+  const swWinner = state.picks[swKey];
+  
+  const emKey = matchupKey([finalFour.East, finalFour.Midwest]);
+  const emWinner = state.picks[emKey];
+  
   const champion = getChampion();
   
-  if (champion) {
-    // Tournament is complete - show only the champion with highlighting
-    const champTeam = createBracketTeamEl(champion, true);
-    if (champTeam) {
-      champTeam.classList.add("championship-team");
-      champMatchupDiv.appendChild(champTeam);
-    }
-  } else {
-    // Tournament not complete - show the two finalists
-    const swKey = matchupKey([finalFour.South, finalFour.West]);
-    const swWinner = state.picks[swKey];
+  if (swWinner && emWinner) {
+    // Determine who is champion and who is runner-up
+    let finalist1 = swWinner;
+    let finalist2 = emWinner;
+    let isFinalist1Champ = champion === swWinner;
     
-    const emKey = matchupKey([finalFour.East, finalFour.Midwest]);
-    const emWinner = state.picks[emKey];
-    
-    if (swWinner) {
-      const finalistEl = createBracketTeamEl(swWinner, false);
-      if (finalistEl) {
-        finalistEl.classList.add("championship-team");
-        champMatchupDiv.appendChild(finalistEl);
-      }
+    const finalistEl1 = createBracketTeamEl(finalist1, isFinalist1Champ);
+    if (finalistEl1) {
+      finalistEl1.classList.add("championship-team");
+      champMatchupDiv.appendChild(finalistEl1);
     }
     
-    if (emWinner) {
-      const finalistEl = createBracketTeamEl(emWinner, false);
-      if (finalistEl) {
-        finalistEl.classList.add("championship-team");
-        champMatchupDiv.appendChild(finalistEl);
-      }
+    const finalistEl2 = createBracketTeamEl(finalist2, !isFinalist1Champ);
+    if (finalistEl2) {
+      finalistEl2.classList.add("championship-team");
+      champMatchupDiv.appendChild(finalistEl2);
+    }
+  } else if (swWinner) {
+    const finalistEl = createBracketTeamEl(swWinner, swWinner === champion);
+    if (finalistEl) {
+      finalistEl.classList.add("championship-team");
+      champMatchupDiv.appendChild(finalistEl);
+    }
+  } else if (emWinner) {
+    const finalistEl = createBracketTeamEl(emWinner, emWinner === champion);
+    if (finalistEl) {
+      finalistEl.classList.add("championship-team");
+      champMatchupDiv.appendChild(finalistEl);
     }
   }
   
   champMatch.appendChild(champMatchupDiv);
   champSection.appendChild(champMatch);
+  
+  // Add champion logo in the middle if tournament is complete
+  if (champion) {
+    const champLogoDiv = document.createElement("div");
+    champLogoDiv.className = "champion-logo";
+    
+    const champTeam = getTeam(champion);
+    if (champTeam) {
+      const logoImg = document.createElement("img");
+      logoImg.src = getMascotImage(champTeam);
+      logoImg.alt = champTeam.mascot;
+      champLogoDiv.appendChild(logoImg);
+    }
+    
+    champSection.appendChild(champLogoDiv);
+  }
   
   container.appendChild(champSection);
   

@@ -38,6 +38,12 @@ header {
   z-index: 100;
 }
 
+@media (max-width: 480px) {
+  header {
+    padding: 0.5rem 0.75rem 0;
+  }
+}
+
 .header-inner {
   display: flex;
   align-items: center;
@@ -93,6 +99,12 @@ header {
   justify-content: space-between;
   font-size: 0.75rem;
   color: var(--muted);
+}
+
+@media (max-width: 480px) {
+  .progress-labels {
+    font-size: 0.65rem;
+  }
 }
 
 /* ─── Main / Matchup View ─────────────────────────────────────────── */
@@ -401,6 +413,11 @@ main#complete-view {
   order: -1;
 }
 
+.region-bracket.east .region-name,
+.region-bracket.midwest .region-name {
+  order: 1;
+}
+
 .bracket-round {
   display: flex;
   flex-direction: column;
@@ -552,7 +569,24 @@ main#complete-view {
   color: var(--muted);
   flex-shrink: 0;
 }
+.champion-logo {
+  width: 200px;
+  height: auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  min-height: 200px;
+}
 
+.champion-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 200px;
+  max-height: 300px;
+}
 .championship-vs {
   display: none;
 }
@@ -715,30 +749,31 @@ main#complete-view {
 
 @media (max-width: 480px) {
   .logo { font-size: 1rem; }
-  .image-wrap { width: 180px; height: 180px; }
-  .mascot-name { font-size: 1.9rem; }
+  .image-wrap { width: 130px; height: 130px; }
+  .mascot-name { font-size: 1.4rem; }
   .arena { 
     flex-direction: column;
     gap: 0;
-    height: 100vh;
+    height: calc(100vh - 140px);
     padding: 0;
   }
   .team-card { 
     flex: 1;
-    padding: 1rem 0.6rem;
+    padding: 0.6rem 0.4rem;
     border-radius: 0;
     border: none;
     border-bottom: 2px solid var(--border);
     justify-content: center;
+    gap: 0.5rem;
   }
   .team-card:last-of-type {
     border-bottom: none;
   }
   .vs-label { 
-    font-size: 1rem;
+    font-size: 0.85rem;
     position: absolute;
     background: var(--surface);
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 50%;
     border: 2px solid var(--border);
     z-index: 10;
@@ -746,11 +781,16 @@ main#complete-view {
   main#matchup-view {
     padding: 0;
     position: relative;
+    gap: 0;
   }
   .round-info {
     position: absolute;
     top: 1rem;
     z-index: 50;
+    font-size: 0.7rem;
+  }
+  .instructions {
+    display: none;
   }
   .champion-name { font-size: 1.3rem; }
 }
