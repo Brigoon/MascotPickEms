@@ -1,0 +1,420 @@
+/* ─── Reset & Base ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0f1117;
+  --surface:    #1a1d27;
+  --surface2:   #22263a;
+  --border:     #2e3350;
+  --accent:     #f5a623;
+  --accent2:    #e05252;
+  --text:       #f0f0f0;
+  --muted:      #8a8fa8;
+  --win-green:  #2ecc71;
+  --lose-red:   #e74c3c;
+  --radius:     12px;
+}
+
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────── */
+header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0.75rem 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#year-badge {
+  background: var(--accent);
+  color: #111;
+  font-size: 0.75rem;
+  font-weight: bold;
+  font-family: monospace;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+/* ─── Progress ────────────────────────────────────────────────────── */
+.progress-container { padding-bottom: 0.75rem; }
+
+.progress-bar-outer {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ─── Main / Matchup View ─────────────────────────────────────────── */
+main#matchup-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem;
+  gap: 1rem;
+}
+
+.round-info {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── Arena ────────────────────────────────────────────────────────── */
+.arena {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+/* Slide-in animation */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.arena.slide-in {
+  animation: slideIn 0.35s ease forwards;
+}
+
+/* ─── Team Card ────────────────────────────────────────────────────── */
+.team-card {
+  flex: 1;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  min-width: 0;
+}
+
+.team-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 6px 24px rgba(245, 166, 35, 0.2);
+}
+
+.team-card:active {
+  transform: scale(0.97);
+}
+
+/* Win / Lose states */
+.team-card.winner {
+  border-color: var(--win-green);
+  box-shadow: 0 0 24px rgba(46, 204, 113, 0.4);
+  background: #162a1f;
+  transform: scale(1.04);
+  transition: all 0.25s ease;
+}
+
+.team-card.loser {
+  opacity: 0.35;
+  transform: scale(0.95);
+  transition: all 0.25s ease;
+}
+
+.image-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mascot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-info {
+  text-align: center;
+}
+
+.mascot-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.school-name {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.pick-hint {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.team-card:hover .pick-hint {
+  opacity: 1;
+}
+
+/* ─── VS Label ────────────────────────────────────────────────────── */
+.vs-label {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.instructions {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────── */
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #111;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.7rem 1.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  letter-spacing: 0.04em;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* ─── Complete View ───────────────────────────────────────────────── */
+main#complete-view {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+
+.complete-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 800px;
+  width: 100%;
+}
+
+.trophy {
+  font-size: 3.5rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.complete-title {
+  font-size: 2rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+.champion-card {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 0 32px rgba(245, 166, 35, 0.25);
+}
+
+.mascot-img.large {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.champion-name {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--accent);
+  text-align: center;
+}
+
+.champion-school {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+/* ─── Bracket Summary ─────────────────────────────────────────────── */
+.bracket-section {
+  width: 100%;
+}
+
+.bracket-section h2 {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.bracket-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.region-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.region-summary h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+  color: var(--text);
+}
+
+.summary-table th {
+  color: var(--muted);
+  text-align: left;
+  padding: 0.2rem 0.3rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-table td {
+  padding: 0.22rem 0.3rem;
+  border-bottom: 1px solid rgba(46,51,80,0.4);
+}
+
+.loser-cell {
+  color: var(--muted);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .logo { font-size: 1rem; }
+  .image-wrap { width: 80px; height: 80px; }
+  .mascot-name { font-size: 0.95rem; }
+  .arena { gap: 0.75rem; }
+  .team-card { padding: 1rem 0.6rem; }
+  .vs-label { font-size: 1rem; }
+  .pick-hint { display: none; }
+  .champion-name { font-size: 1.3rem; }
+}

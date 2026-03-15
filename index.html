@@ -1,1 +1,95 @@
-blah
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>March Mascot Madness 🏀</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">🏀 March Mascot Madness</div>
+      <div class="header-right">
+        <span id="year-badge">2025</span>
+        <button id="reset-btn" class="btn-secondary" title="Start over">↺ Reset</button>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div class="progress-container">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-labels">
+        <span id="round-label">Round of 64</span>
+        <span id="progress-text">0 / 63 games picked</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Matchup View -->
+  <main id="matchup-view">
+    <div class="round-info">
+      <span id="matchup-counter">Game 1 of 32</span>
+    </div>
+
+    <div id="arena" class="arena slide-in">
+
+      <!-- Team A -->
+      <div class="team-card" id="card-a">
+        <div class="image-wrap">
+          <img class="mascot-img" src="" alt="" />
+        </div>
+        <div class="team-info">
+          <div class="mascot-name"></div>
+          <div class="school-name"></div>
+        </div>
+        <div class="pick-hint">TAP TO PICK</div>
+      </div>
+
+      <!-- VS -->
+      <div class="vs-label" id="vs-label">VS</div>
+
+      <!-- Team B -->
+      <div class="team-card" id="card-b">
+        <div class="image-wrap">
+          <img class="mascot-img" src="" alt="" />
+        </div>
+        <div class="team-info">
+          <div class="mascot-name"></div>
+          <div class="school-name"></div>
+        </div>
+        <div class="pick-hint">TAP TO PICK</div>
+      </div>
+
+    </div>
+
+    <p class="instructions">Click or tap a mascot to advance them to the next round.</p>
+  </main>
+
+  <!-- Complete View -->
+  <main id="complete-view" style="display:none;">
+    <div class="complete-inner">
+      <div class="trophy">🏆</div>
+      <h1 class="complete-title">Your Champion!</h1>
+      <div class="champion-card">
+        <img class="mascot-img large" id="champion-img" src="" alt="" />
+        <div class="champion-name" id="champion-name"></div>
+        <div class="champion-school" id="champion-school"></div>
+      </div>
+
+      <div class="bracket-section">
+        <h2>Your Full Bracket</h2>
+        <div id="bracket-summary" class="bracket-summary"></div>
+      </div>
+
+      <button id="restart-btn" class="btn-primary">Start New Bracket ↺</button>
+    </div>
+  </main>
+
+  <script src="bracket.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
