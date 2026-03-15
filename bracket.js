@@ -2,96 +2,106 @@
 // To update for a new year: edit the teams below and update TOURNAMENT_YEAR
 // Seeds are stored here but never shown to the user
 
-const TOURNAMENT_YEAR = 2025;
+const TOURNAMENT_YEAR = 2026;
 
 // Each team: { id, school, mascot, seed, region, image }
 // image: path to mascot image (e.g. "images/tiger.png") or null for placeholder
 const TEAMS = [
-  // ===== SOUTH REGION =====
-  { id: "auburn",        school: "Auburn",        mascot: "Tigers",        seed: 1,  region: "South", image: null },
-  { id: "michigan_st",   school: "Michigan State", mascot: "Spartans",      seed: 2,  region: "South", image: null },
-  { id: "iowa_state",    school: "Iowa State",     mascot: "Cyclones",      seed: 3,  region: "South", image: null },
-  { id: "texas_am",      school: "Texas A&M",      mascot: "Aggies",        seed: 4,  region: "South", image: null },
-  { id: "michigan",      school: "Michigan",       mascot: "Wolverines",    seed: 5,  region: "South", image: null },
-  { id: "ole_miss",      school: "Ole Miss",       mascot: "Rebels",        seed: 6,  region: "South", image: null },
-  { id: "marquette",     school: "Marquette",      mascot: "Golden Eagles", seed: 7,  region: "South", image: null },
-  { id: "louisville",    school: "Louisville",     mascot: "Cardinals",     seed: 8,  region: "South", image: null },
-  { id: "creighton",     school: "Creighton",      mascot: "Bluejays",      seed: 9,  region: "South", image: null },
-  { id: "new_mexico",    school: "New Mexico",     mascot: "Lobos",         seed: 10, region: "South", image: null },
-  { id: "nc_state",      school: "NC State",       mascot: "Wolfpack",      seed: 11, region: "South", image: null },
-  { id: "ucsd",          school: "UC San Diego",   mascot: "Tritons",       seed: 12, region: "South", image: null },
-  { id: "yale",          school: "Yale",           mascot: "Bulldogs",      seed: 13, region: "South", image: null },
-  { id: "lipscomb",      school: "Lipscomb",       mascot: "Bisons",        seed: 14, region: "South", image: null },
-  { id: "bryant",        school: "Bryant",         mascot: "Bulldogs",      seed: 15, region: "South", image: null },
-  { id: "alabama_st",    school: "Alabama State",  mascot: "Hornets",       seed: 16, region: "South", image: null },
+  { id: "michigan",    school: "Michigan",       mascot: "Wolverine",          seed: 1,  region: "South",   image: "images/wolverine.jpg" },
+  { id: "florida",     school: "Florida",        mascot: "Albert",             seed: 1,  region: "East",    image: "images/albert.jpg" },
+  { id: "arizona",     school: "Arizona",        mascot: "Wilbur and Wilma",   seed: 1,  region: "Midwest", image: "images/wilbur.jpg" },
+  { id: "duke",        school: "Duke",           mascot: "Blue Devil",         seed: 1,  region: "West",    image: "images/bluedevil.jpg" },
 
-  // ===== EAST REGION =====
-  { id: "duke",          school: "Duke",           mascot: "Blue Devils",   seed: 1,  region: "East", image: "images/bluedevil.jpg" },
-  { id: "alabama",       school: "Alabama",        mascot: "Crimson Tide",  seed: 2,  region: "East", image: null },
-  { id: "wisconsin",     school: "Wisconsin",      mascot: "Badgers",       seed: 3,  region: "East", image: null },
-  { id: "arizona",       school: "Arizona",        mascot: "Wildcats",      seed: 4,  region: "East", image: null },
-  { id: "oregon",        school: "Oregon",         mascot: "Ducks",         seed: 5,  region: "East", image: null },
-  { id: "byu",           school: "BYU",            mascot: "Cougars",       seed: 6,  region: "East", image: null },
-  { id: "saint_marys",   school: "Saint Mary's",   mascot: "Gaels",         seed: 7,  region: "East", image: null },
-  { id: "miss_state",    school: "Mississippi St", mascot: "Bulldogs",      seed: 8,  region: "East", image: null },
-  { id: "baylor",        school: "Baylor",         mascot: "Bears",         seed: 9,  region: "East", image: null },
-  { id: "vanderbilt",    school: "Vanderbilt",     mascot: "Commodores",    seed: 10, region: "East", image: null },
-  { id: "vcu",           school: "VCU",            mascot: "Rams",          seed: 11, region: "East", image: null },
-  { id: "liberty",       school: "Liberty",        mascot: "Flames",        seed: 12, region: "East", image: null },
-  { id: "akron",         school: "Akron",          mascot: "Zips",          seed: 13, region: "East", image: null },
-  { id: "montana",       school: "Montana",        mascot: "Grizzlies",     seed: 14, region: "East", image: null },
-  { id: "robert_morris", school: "Robert Morris",  mascot: "Colonials",     seed: 15, region: "East", image: null },
-  { id: "mount_st_marys",school: "Mount St. Mary's",mascot:"Mountaineers",  seed: 16, region: "East", image: null },
+  { id: "houston",     school: "Houston",        mascot: "Shasta",            seed: 2,  region: "South",   image: "images/shasta.jpg" },
+  { id: "uconn",       school: "UConn",          mascot: "Jonathan",           seed: 2,  region: "East",    image: "images/jonathan.jpg" },
+  { id: "michigan_st", school: "Michigan State", mascot: "Sparty",             seed: 2,  region: "Midwest", image: "images/sparty.jpg" },
+  { id: "iowa_state",  school: "Iowa State",     mascot: "Cy",                 seed: 2,  region: "West",    image: "images/cy.jpg" },
 
-  // ===== MIDWEST REGION =====
-  { id: "houston",       school: "Houston",        mascot: "Cougars",       seed: 1,  region: "Midwest", image: null },
-  { id: "tennessee",     school: "Tennessee",      mascot: "Volunteers",    seed: 2,  region: "Midwest", image: null },
-  { id: "kentucky",      school: "Kentucky",       mascot: "Wildcats",      seed: 3,  region: "Midwest", image: null },
-  { id: "purdue",        school: "Purdue",         mascot: "Boilermakers",  seed: 4,  region: "Midwest", image: null },
-  { id: "clemson",       school: "Clemson",        mascot: "Tigers",        seed: 5,  region: "Midwest", image: null },
-  { id: "illinois",      school: "Illinois",       mascot: "Illini",        seed: 6,  region: "Midwest", image: null },
-  { id: "ucla",          school: "UCLA",           mascot: "Bruins",        seed: 7,  region: "Midwest", image: null },
-  { id: "gonzaga",       school: "Gonzaga",        mascot: "Bulldogs",      seed: 8,  region: "Midwest", image: null },
-  { id: "georgia",       school: "Georgia",        mascot: "Bulldogs",      seed: 9,  region: "Midwest", image: null },
-  { id: "utah_state",    school: "Utah State",     mascot: "Aggies",        seed: 10, region: "Midwest", image: null },
-  { id: "xavier_win",    school: "Xavier",         mascot: "Musketeers",    seed: 11, region: "Midwest", image: null },
-  { id: "mcneese",       school: "McNeese State",  mascot: "Cowboys",       seed: 12, region: "Midwest", image: null },
-  { id: "high_point",    school: "High Point",     mascot: "Panthers",      seed: 13, region: "Midwest", image: null },
-  { id: "troy",          school: "Troy",           mascot: "Trojans",       seed: 14, region: "Midwest", image: null },
-  { id: "wofford",       school: "Wofford",        mascot: "Terriers",      seed: 15, region: "Midwest", image: null },
-  { id: "siue",          school: "SIU Edwardsville",mascot:"Cougars",       seed: 16, region: "Midwest", image: null },
+  { id: "purdue",      school: "Purdue",         mascot: "Pete",               seed: 3,  region: "South",   image: "images/pete.jpg" },
+  { id: "illinois",    school: "Illinois",       mascot: "Kingfisher",         seed: 3,  region: "East",    image: "images/kingfischer.jpg" },
+  { id: "gonzaga",     school: "Gonzaga",        mascot: "Spike",              seed: 3,  region: "Midwest", image: "images/spike.jpg" },
+  { id: "virginia",    school: "Virginia",       mascot: "The Cavalier",       seed: 3,  region: "West",    image: "images/cavalier.jpg" },
 
-  // ===== WEST REGION =====
-  { id: "florida",       school: "Florida",        mascot: "Gators",        seed: 1,  region: "West", image: null },
-  { id: "st_johns",      school: "St. John's",     mascot: "Red Storm",     seed: 2,  region: "West", image: null },
-  { id: "texas_tech",    school: "Texas Tech",     mascot: "Red Raiders",   seed: 3,  region: "West", image: null },
-  { id: "maryland",      school: "Maryland",       mascot: "Terrapins",     seed: 4,  region: "West", image: null },
-  { id: "memphis",       school: "Memphis",        mascot: "Tigers",        seed: 5,  region: "West", image: null },
-  { id: "missouri",      school: "Missouri",       mascot: "Tigers",        seed: 6,  region: "West", image: null },
-  { id: "kansas",        school: "Kansas",         mascot: "Jayhawks",      seed: 7,  region: "West", image: null },
-  { id: "uconn",         school: "UConn",          mascot: "Huskies",       seed: 8,  region: "West", image: null },
-  { id: "oklahoma",      school: "Oklahoma",       mascot: "Sooners",       seed: 9,  region: "West", image: null },
-  { id: "arkansas",      school: "Arkansas",       mascot: "Razorbacks",    seed: 10, region: "West", image: null },
-  { id: "drake",         school: "Drake",          mascot: "Bulldogs",      seed: 11, region: "West", image: null },
-  { id: "colorado_st",   school: "Colorado State", mascot: "Rams",          seed: 12, region: "West", image: null },
-  { id: "grand_canyon",  school: "Grand Canyon",   mascot: "Antelopes",     seed: 13, region: "West", image: null },
-  { id: "unc_wilmington",school: "UNC Wilmington", mascot: "Seahawks",      seed: 14, region: "West", image: null },
-  { id: "omaha",         school: "Omaha",          mascot: "Mavericks",     seed: 15, region: "West", image: null },
-  { id: "norfolk_state", school: "Norfolk State",  mascot: "Spartans",      seed: 16, region: "West", image: null },
+  { id: "nebraska",    school: "Nebraska",       mascot: "Herbie",             seed: 4,  region: "South",   image: "images/herbie.jpg" },
+  { id: "vanderbilt",  school: "Vanderbilt",     mascot: "Mr. Commodore",      seed: 4,  region: "East",    image: "images/mrcommodore.jpg" },
+  { id: "st_johns",    school: "St John's",      mascot: "Johnny Thunderbird", seed: 4,  region: "Midwest", image: "images/johnnythunderbird.jpg" },
+  { id: "alabama",     school: "Alabama",        mascot: "Big Al",             seed: 4,  region: "West",    image: "images/bigal.jpg" },
+
+  { id: "arkansas",    school: "Arkansas",       mascot: "The Razorback",      seed: 5,  region: "South",   image: "images/razorback.jpg" },
+  { id: "kansas",      school: "Kansas",         mascot: "Big Jay",            seed: 5,  region: "East",    image: "images/bigjay.jpg" },
+  { id: "texas_tech",  school: "Texas Tech",     mascot: "Raider Red",         seed: 5,  region: "Midwest", image: "images/raiderred.jpg" },
+  { id: "wisconsin",   school: "Wisconsin",      mascot: "Bucky",              seed: 5,  region: "West",    image: "images/bucky.jpg" },
+
+  { id: "tennessee",   school: "Tennessee",      mascot: "Smokey",             seed: 6,  region: "South",   image: "images/smokey.jpg" },
+  { id: "byu",         school: "BYU",            mascot: "Cosmo",              seed: 6,  region: "East",    image: "images/cosmo.jpg" },
+  { id: "unc",         school: "North Carolina", mascot: "Rameses",            seed: 6,  region: "Midwest", image: "images/rameses.jpg" },
+  { id: "louisville",  school: "Louisville",     mascot: "Louie",              seed: 6,  region: "West",    image: "images/louie.jpg" },
+
+  { id: "kentucky",    school: "Kentucky",       mascot: "The Wildcat",        seed: 7,  region: "South",   image: "images/thewildcat.jpg" },
+  { id: "saint_marys", school: "Saint Mary's",   mascot: "Gael",               seed: 7,  region: "East",    image: "images/gael.jpg" },
+  { id: "miami",       school: "Miami (FL)",     mascot: "Sebastian",          seed: 7,  region: "Midwest", image: "images/sebastian.jpg" },
+  { id: "ucla",        school: "UCLA",           mascot: "Joe Bruin",          seed: 7,  region: "West",    image: "images/joebruin.jpg" },
+
+  { id: "utah_state",  school: "Utah State",     mascot: "Big Blue",           seed: 8,  region: "South",   image: "images/bigblue.jpg" },
+  { id: "clemson",     school: "Clemson",        mascot: "The Tiger",          seed: 8,  region: "East",    image: "images/thetiger.jpg" },
+  { id: "ohio_state",  school: "Ohio State",     mascot: "Brutus",             seed: 8,  region: "Midwest", image: "images/brutus.jpg" },
+  { id: "georgia",     school: "Georgia",        mascot: "Hairy Dawg",         seed: 8,  region: "West",    image: "images/hairydawg.jpg" },
+
+  { id: "todo21",      school: "todo",       mascot: "todo",     seed: 9,  region: "South",   image: null },
+  { id: "todo22",      school: "todo",       mascot: "todo",     seed: 9,  region: "East",    image: null },
+  { id: "todo23",      school: "todo",       mascot: "todo",     seed: 9,  region: "Midwest", image: null },
+  { id: "todo24",      school: "todo",       mascot: "todo",     seed: 9,  region: "West",    image: null },
+
+  { id: "todo25",      school: "todo",       mascot: "todo",     seed: 10, region: "South",   image: null },
+  { id: "todo26",      school: "todo",       mascot: "todo",     seed: 10, region: "East",    image: null },
+  { id: "todo27",      school: "todo",       mascot: "todo",     seed: 10, region: "Midwest", image: null },
+  { id: "todo28",      school: "todo",       mascot: "todo",     seed: 10, region: "West",    image: null },
+
+  { id: "todo29",      school: "todo",       mascot: "todo",     seed: 11, region: "South",   image: null },
+  { id: "todo30",      school: "todo",       mascot: "todo",     seed: 11, region: "East",    image: null },
+  { id: "todo31",      school: "todo",       mascot: "todo",     seed: 11, region: "Midwest", image: null },
+  { id: "todo32",      school: "todo",       mascot: "todo",     seed: 11, region: "West",    image: null },
+
+  { id: "todo33",      school: "todo",       mascot: "todo",     seed: 12, region: "South",   image: null },
+  { id: "todo34",      school: "todo",       mascot: "todo",     seed: 12, region: "East",    image: null },
+  { id: "todo35",      school: "todo",       mascot: "todo",     seed: 12, region: "Midwest", image: null },
+  { id: "todo36",      school: "todo",       mascot: "todo",     seed: 12, region: "West",    image: null },
+
+  { id: "todo37",      school: "todo",       mascot: "todo",     seed: 13, region: "South",   image: null },
+  { id: "todo38",      school: "todo",       mascot: "todo",     seed: 13, region: "East",    image: null },
+  { id: "todo39",      school: "todo",       mascot: "todo",     seed: 13, region: "Midwest", image: null },
+  { id: "todo40",      school: "todo",       mascot: "todo",     seed: 13, region: "West",    image: null },
+
+  { id: "todo41",      school: "todo",       mascot: "todo",     seed: 14, region: "South",   image: null },
+  { id: "todo42",      school: "todo",       mascot: "todo",     seed: 14, region: "East",    image: null },
+  { id: "todo43",      school: "todo",       mascot: "todo",     seed: 14, region: "Midwest", image: null },
+  { id: "todo44",      school: "todo",       mascot: "todo",     seed: 14, region: "West",    image: null },
+
+  { id: "todo45",      school: "todo",       mascot: "todo",     seed: 15, region: "South",   image: null },
+  { id: "todo46",      school: "todo",       mascot: "todo",     seed: 15, region: "East",    image: null },
+  { id: "todo47",      school: "todo",       mascot: "todo",     seed: 15, region: "Midwest", image: null },
+  { id: "todo48",      school: "todo",       mascot: "todo",     seed: 15, region: "West",    image: null },
+
+  { id: "todo49",      school: "todo",       mascot: "todo",     seed: 16, region: "South",   image: null },
+  { id: "todo50",      school: "todo",       mascot: "todo",     seed: 16, region: "East",    image: null },
+  { id: "todo51",      school: "todo",       mascot: "todo",     seed: 16, region: "Midwest", image: null },
+  { id: "todo52",      school: "todo",       mascot: "todo",     seed: 16, region: "West",    image: null },
 ];
 
-// Generate first-round matchups dynamically based on March Madness bracket format
-// Standard bracket: 1v16, 2v15, 3v14, 4v13, 5v12, 6v11, 7v10, 8v9
+// Generate first-round matchups in standard NCAA bracket order.
+// Bracket order ensures correct progression: 1/16 winner faces 8/9 winner, etc.
+// Seed pairings in bracket order: (1,16),(8,9),(5,12),(4,13),(6,11),(3,14),(7,10),(2,15)
+const BRACKET_SEED_ORDER = [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]];
+
 function generateFirstRoundMatchups() {
   const regions = [...new Set(TEAMS.map(t => t.region))].sort();
   const matchups = [];
   
   regions.forEach(region => {
     const regionTeams = TEAMS.filter(t => t.region === region).sort((a, b) => a.seed - b.seed);
-    // Pair seeds: (1,16), (2,15), (3,14), (4,13), (5,12), (6,11), (7,10), (8,9)
-    for (let i = 0; i < 8; i++) {
-      matchups.push([regionTeams[i].id, regionTeams[15 - i].id]);
-    }
+    BRACKET_SEED_ORDER.forEach(([seedA, seedB]) => {
+      matchups.push([regionTeams[seedA - 1].id, regionTeams[seedB - 1].id]);
+    });
   });
   
   return matchups;

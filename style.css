@@ -1,5 +1,4 @@
 /* ─── Reset & Base ────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Supria+Sans:wght@400;600;700&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,7 +21,7 @@ html { font-size: 16px; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Supria Sans', sans-serif;
+  font-family: 'Arial', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -361,7 +360,7 @@ main#complete-view {
 
 .bracket-view {
   display: grid;
-  grid-template-columns: 1fr 120px 1fr;
+  grid-template-columns: 9fr 4fr 9fr;
   grid-template-rows: auto auto auto;
   gap: 1rem;
   padding: 1rem;
@@ -369,8 +368,8 @@ main#complete-view {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   width: 100%;
-  max-height: 85vh;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 .region-bracket {
@@ -460,7 +459,7 @@ main#complete-view {
 }
 
 .bracket-team-seed {
-  font-size: 0.54rem;
+  font-size: 0.65rem;
   color: var(--muted);
   font-weight: bold;
   flex-shrink: 0;
@@ -469,12 +468,12 @@ main#complete-view {
 .bracket-team-mascot {
   font-weight: bold;
   color: var(--accent);
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   flex-shrink: 0;
 }
 
 .bracket-team-school {
-  font-size: 0.54rem;
+  font-size: 0.68rem;
   color: var(--muted);
   flex-shrink: 0;
 }
@@ -499,14 +498,15 @@ main#complete-view {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  align-items: center;
+  align-items: stretch;
   flex: 1;
   justify-content: center;
   min-height: 0;
+  width: 100%;
 }
 
 .final-four-label {
-  font-size: 0.6rem;
+  font-size: 1.0rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -525,8 +525,8 @@ main#complete-view {
 }
 
 .championship-team {
-  padding: 0.3rem 0.4rem;
-  font-size: 0.58rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 1.2rem;
   color: var(--text);
   display: flex;
   flex-direction: row;
@@ -539,6 +539,7 @@ main#complete-view {
   border-radius: 0;
   align-items: center;
   justify-content: center;
+  min-height: 2.5rem;
 }
 
 .championship-team:not(:last-child) {
@@ -550,22 +551,25 @@ main#complete-view {
   font-weight: 500;
 }
 
+.championship-team .bracket-team-seed,
 .championship-team-seed {
-  font-size: 0.53rem;
+  font-size: 1.0rem;
   color: var(--muted);
   font-weight: bold;
   flex-shrink: 0;
 }
 
+.championship-team .bracket-team-mascot,
 .championship-team-mascot {
   font-weight: bold;
-  font-size: 0.58rem;
+  font-size: 1.0rem;
   color: var(--accent);
   flex-shrink: 0;
 }
 
+.championship-team .bracket-team-school,
 .championship-team-school {
-  font-size: 0.53rem;
+  font-size: 1.0rem;
   color: var(--muted);
   flex-shrink: 0;
 }
@@ -609,7 +613,7 @@ main#complete-view {
 
 @media (max-width: 1400px) {
   .bracket-view {
-    grid-template-columns: 1fr 100px 1fr;
+    grid-template-columns: 9fr 5fr 9fr;
     gap: 0.75rem;
     padding: 0.75rem;
   }
@@ -620,7 +624,7 @@ main#complete-view {
   }
 
   .championship-team {
-    font-size: 0.53rem;
+    font-size: 1.2rem;
     min-width: 95px;
   }
 }

@@ -251,11 +251,11 @@ function buildBracketForRegion(region) {
   // Build bracket structure: rounds 1-4 for each region
   const rounds = [];
   
-  // Round 1: First round matchups for this region
+  // Round 1: First round matchups in standard NCAA bracket order
   const round1 = [];
-  for (let i = 0; i < 8; i++) {
-    const team1Id = regionTeams[i].id;
-    const team2Id = regionTeams[15 - i].id;
+  BRACKET_SEED_ORDER.forEach(([seedA, seedB]) => {
+    const team1Id = regionTeams[seedA - 1].id;
+    const team2Id = regionTeams[seedB - 1].id;
     const matchupKey1 = matchupKey([team1Id, team2Id]);
     const winner = state.picks[matchupKey1];
     round1.push({
@@ -263,7 +263,7 @@ function buildBracketForRegion(region) {
       team2: team2Id,
       winner: winner,
     });
-  }
+  });
   rounds.push(round1);
   
   // Rounds 2-4: Build forward from picks
@@ -559,14 +559,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("restart-btn").addEventListener("click", () => {
-    if (confirm("Start over? All picks will be lost.")) {
-      resetState();
-      document.getElementById("matchup-view").style.display = "flex";
-      document.getElementById("complete-view").style.display = "none";
-      renderMatchup();
-    }
-  });
 
   if (state.done) {
     renderComplete();
