@@ -1,4 +1,6 @@
 /* ─── Reset & Base ────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Supria+Sans:wght@400;600;700&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -20,7 +22,7 @@ html { font-size: 16px; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Supria Sans', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -196,7 +198,7 @@ main#matchup-view {
 }
 
 .mascot-name {
-  font-size: 1.1rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: var(--text);
   line-height: 1.2;
@@ -265,7 +267,7 @@ main#complete-view {
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 1rem;
   overflow-y: auto;
 }
 
@@ -274,7 +276,7 @@ main#complete-view {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  max-width: 800px;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -329,7 +331,265 @@ main#complete-view {
   text-align: center;
 }
 
-/* ─── Bracket Summary ─────────────────────────────────────────────── */
+/* ─── Bracket View ───────────────────────────────────────────────── */
+.bracket-complete {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.bracket-title {
+  font-size: 1.2rem;
+  color: var(--accent);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.bracket-view {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.region-bracket {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: fit-content;
+}
+
+.region-bracket.south {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.region-bracket.west {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.region-bracket.east {
+  grid-column: 3;
+  grid-row: 1;
+  flex-direction: column-reverse;
+}
+
+.region-bracket.midwest {
+  grid-column: 3;
+  grid-row: 3;
+  flex-direction: column-reverse;
+}
+
+.region-name {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+  text-align: center;
+  order: -1;
+}
+
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  justify-content: space-around;
+}
+
+.bracket-matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bracket-team {
+  padding: 0.3rem 0.4rem;
+  font-size: 0.6rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  line-height: 1;
+  flex: 1;
+  background: var(--surface2);
+  border: none;
+  border-radius: 0;
+  align-items: center;
+}
+
+.bracket-team:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.bracket-team.winner-team {
+  background: rgba(46, 204, 113, 0.15);
+  font-weight: 500;
+}
+
+.bracket-team-seed {
+  font-size: 0.54rem;
+  color: var(--muted);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.bracket-team-mascot {
+  font-weight: bold;
+  color: var(--accent);
+  font-size: 0.58rem;
+  flex-shrink: 0;
+}
+
+.bracket-team-school {
+  font-size: 0.54rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.bracket-connector {
+  display: none;
+}
+
+/* Championship Section */
+.championship-section {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.5rem;
+}
+
+.final-four-matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  min-height: 0;
+}
+
+.final-four-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.championship-matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.championship-team {
+  padding: 0.3rem 0.4rem;
+  font-size: 0.58rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  text-align: center;
+  line-height: 1;
+  flex: 1;
+  background: var(--surface2);
+  border: none;
+  border-radius: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.championship-team:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.championship-team.winner-team {
+  background: rgba(46, 204, 113, 0.15);
+  font-weight: 500;
+}
+
+.championship-team-seed {
+  font-size: 0.53rem;
+  color: var(--muted);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.championship-team-mascot {
+  font-weight: bold;
+  font-size: 0.58rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.championship-team-school {
+  font-size: 0.53rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.championship-vs {
+  display: none;
+}
+
+.champion-display {
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  min-height: 0;
+}
+
+.champion-label {
+  font-size: 0.65rem;
+  color: var(--accent);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+@media (max-width: 1400px) {
+  .bracket-view {
+    grid-template-columns: 1fr 100px 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .bracket-team {
+    font-size: 0.55rem;
+    min-width: 100px;
+  }
+
+  .championship-team {
+    font-size: 0.53rem;
+    min-width: 95px;
+  }
+}
 .bracket-section {
   width: 100%;
 }
@@ -456,7 +716,7 @@ main#complete-view {
 @media (max-width: 480px) {
   .logo { font-size: 1rem; }
   .image-wrap { width: 180px; height: 180px; }
-  .mascot-name { font-size: 0.95rem; }
+  .mascot-name { font-size: 1.9rem; }
   .arena { 
     flex-direction: column;
     gap: 0;

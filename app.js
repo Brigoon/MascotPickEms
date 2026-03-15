@@ -233,22 +233,294 @@ function handlePick(winnerId) {
 }
 
 function renderComplete() {
-  const championId = getChampion();
-  const champion = championId ? getTeam(championId) : null;
-
   document.getElementById("matchup-view").style.display = "none";
   document.getElementById("complete-view").style.display = "flex";
-
-  if (champion) {
-    document.getElementById("champion-img").src = getMascotImage(champion);
-    document.getElementById("champion-img").alt = champion.mascot;
-    document.getElementById("champion-name").textContent = champion.mascot;
-    document.getElementById("champion-school").textContent = champion.school;
-  }
 
   // Update progress bar to show 63/63
   document.getElementById("progress-bar").style.width = progressPercent() + "%";
   document.getElementById("progress-text").textContent = `${completedMatchups()} / ${totalMatchups()} games picked`;
+
+  // Show bracket visualization
+  renderBracketVisualization();
+}
+
+// ─── Bracket Visualization ────────────────────────────────────────────────────
+function buildBracketForRegion(region) {
+  const regionTeams = TEAMS.filter(t => t.region === region).sort((a, b) => a.seed - b.seed);
+  
+  // Build bracket structure: rounds 1-4 for each region
+  const rounds = [];
+  
+  // Round 1: First round matchups for this region
+  const round1 = [];
+  for (let i = 0; i < 8; i++) {
+    const team1Id = regionTeams[i].id;
+    const team2Id = regionTeams[15 - i].id;
+    const matchupKey1 = matchupKey([team1Id, team2Id]);
+    const winner = state.picks[matchupKey1];
+    round1.push({
+      team1: team1Id,
+      team2: team2Id,
+      winner: winner,
+    });
+  }
+  rounds.push(round1);
+  
+  // Rounds 2-4: Build forward from picks
+  for (let round = 2; round <= 4; round++) {
+    const prevRound = rounds[round - 2];
+    const roundMatchups = [];
+    for (let i = 0; i < prevRound.length; i += 2) {
+      const winner1 = prevRound[i].winner;
+      const winner2 = prevRound[i + 1].winner;
+      if (winner1 && winner2) {
+        const key = matchupKey([winner1, winner2]);
+        const winner = state.picks[key];
+        roundMatchups.push({
+          team1: winner1,
+          team2: winner2,
+          winner: winner,
+        });
+      } else {
+        // If we don't have both winners yet, add placeholder matchup
+        roundMatchups.push({
+          team1: winner1,
+          team2: winner2,
+          winner: null,
+        });
+      }
+    }
+    if (roundMatchups.length > 0) {
+      rounds.push(roundMatchups);
+    }
+  }
+  
+  return rounds;
+}
+
+function renderBracketVisualization() {
+  const container = document.getElementById("bracket-view");
+  
+  if (!container) {
+    console.error("Bracket container not found");
+    return;
+  }
+  
+  container.innerHTML = "";
+  
+  const regions = ["South", "East", "Midwest", "West"];
+  
+  // Render each region
+  regions.forEach(region => {
+    const rounds = buildBracketForRegion(region);
+    
+    const regionDiv = document.createElement("div");
+    regionDiv.className = `region-bracket ${region.toLowerCase()}`;
+    
+    const regionLabel = document.createElement("div");
+    regionLabel.className = "region-name";
+    regionLabel.textContent = region;
+    regionDiv.appendChild(regionLabel);
+    
+    // Render rounds horizontally
+    const roundsContainer = document.createElement("div");
+    roundsContainer.style.display = "flex";
+    roundsContainer.style.gap = "0.5rem";
+    
+    // For East and Midwest, reverse the order so rounds flow right to left
+    const roundsToDisplay = (region === "East" || region === "Midwest") 
+      ? rounds.slice().reverse() 
+      : rounds;
+    
+    roundsToDisplay.forEach(roundMatchups => {
+      const roundDiv = document.createElement("div");
+      roundDiv.className = "bracket-round";
+      roundDiv.style.flex = "1";
+      
+      roundMatchups.forEach(matchup => {
+        const matchupDiv = document.createElement("div");
+        matchupDiv.className = "bracket-matchup";
+        
+        // Team 1
+        const team1El = matchup.team1 ? createBracketTeamEl(matchup.team1, matchup.winner === matchup.team1) : null;
+        if (team1El) matchupDiv.appendChild(team1El);
+        
+        // Team 2
+        const team2El = matchup.team2 ? createBracketTeamEl(matchup.team2, matchup.winner === matchup.team2) : null;
+        if (team2El) matchupDiv.appendChild(team2El);
+        
+        roundDiv.appendChild(matchupDiv);
+      });
+      
+      roundsContainer.appendChild(roundDiv);
+    });
+    
+    regionDiv.appendChild(roundsContainer);
+    container.appendChild(regionDiv);
+  });
+  
+  // Add championship section in the middle
+  const champSection = document.createElement("div");
+  champSection.className = "championship-section";
+  
+  // Get final 4 teams (region winners)
+  const finalFour = {};
+  regions.forEach(region => {
+    const rounds = buildBracketForRegion(region);
+    const finalRound = rounds[rounds.length - 1];
+    finalFour[region] = finalRound && finalRound[0] ? finalRound[0].winner : null;
+  });
+  
+  // South vs West Semi-Final (left side)
+  if (finalFour.South && finalFour.West) {
+    const match1 = document.createElement("div");
+    match1.className = "final-four-matchup";
+    
+    const label1 = document.createElement("div");
+    label1.className = "final-four-label";
+    label1.textContent = "South vs West";
+    match1.appendChild(label1);
+    
+    const matchupDiv1 = document.createElement("div");
+    matchupDiv1.className = "championship-matchup";
+    
+    const key1 = matchupKey([finalFour.South, finalFour.West]);
+    const winner1 = state.picks[key1];
+    
+    const team1 = createBracketTeamEl(finalFour.South, winner1 === finalFour.South);
+    if (team1) {
+      team1.classList.add("championship-team");
+      matchupDiv1.appendChild(team1);
+    }
+    
+    const team2 = createBracketTeamEl(finalFour.West, winner1 === finalFour.West);
+    if (team2) {
+      team2.classList.add("championship-team");
+      matchupDiv1.appendChild(team2);
+    }
+    
+    match1.appendChild(matchupDiv1);
+    champSection.appendChild(match1);
+  }
+  
+  // Championship Game (center)
+  const champMatch = document.createElement("div");
+  champMatch.className = "final-four-matchup";
+  
+  const champLabel = document.createElement("div");
+  champLabel.className = "final-four-label";
+  champLabel.textContent = "Championship";
+  champMatch.appendChild(champLabel);
+  
+  const champMatchupDiv = document.createElement("div");
+  champMatchupDiv.className = "championship-matchup";
+  
+  // Get the champion (if tournament is done)
+  const champion = getChampion();
+  
+  if (champion) {
+    // Tournament is complete - show only the champion with highlighting
+    const champTeam = createBracketTeamEl(champion, true);
+    if (champTeam) {
+      champTeam.classList.add("championship-team");
+      champMatchupDiv.appendChild(champTeam);
+    }
+  } else {
+    // Tournament not complete - show the two finalists
+    const swKey = matchupKey([finalFour.South, finalFour.West]);
+    const swWinner = state.picks[swKey];
+    
+    const emKey = matchupKey([finalFour.East, finalFour.Midwest]);
+    const emWinner = state.picks[emKey];
+    
+    if (swWinner) {
+      const finalistEl = createBracketTeamEl(swWinner, false);
+      if (finalistEl) {
+        finalistEl.classList.add("championship-team");
+        champMatchupDiv.appendChild(finalistEl);
+      }
+    }
+    
+    if (emWinner) {
+      const finalistEl = createBracketTeamEl(emWinner, false);
+      if (finalistEl) {
+        finalistEl.classList.add("championship-team");
+        champMatchupDiv.appendChild(finalistEl);
+      }
+    }
+  }
+  
+  champMatch.appendChild(champMatchupDiv);
+  champSection.appendChild(champMatch);
+  
+  container.appendChild(champSection);
+  
+  // East vs Midwest Semi-Final (right side)
+  if (finalFour.East && finalFour.Midwest) {
+    const match2 = document.createElement("div");
+    match2.className = "final-four-matchup";
+    
+    const label2 = document.createElement("div");
+    label2.className = "final-four-label";
+    label2.textContent = "East vs Midwest";
+    match2.appendChild(label2);
+    
+    const matchupDiv2 = document.createElement("div");
+    matchupDiv2.className = "championship-matchup";
+    
+    const key2 = matchupKey([finalFour.East, finalFour.Midwest]);
+    const winner2 = state.picks[key2];
+    
+    const team3 = createBracketTeamEl(finalFour.East, winner2 === finalFour.East);
+    if (team3) {
+      team3.classList.add("championship-team");
+      matchupDiv2.appendChild(team3);
+    }
+    
+    const team4 = createBracketTeamEl(finalFour.Midwest, winner2 === finalFour.Midwest);
+    if (team4) {
+      team4.classList.add("championship-team");
+      matchupDiv2.appendChild(team4);
+    }
+    
+    match2.appendChild(matchupDiv2);
+    champSection.appendChild(match2);
+  }
+}
+
+function createBracketTeamEl(teamId, isWinner = false, isChamp = false) {
+  if (!teamId) return null;
+  
+  const team = getTeam(teamId);
+  if (!team) return null;
+  
+  const teamEl = document.createElement("div");
+  teamEl.className = `bracket-team ${isWinner ? "winner-team" : ""}`;
+  
+  const seedEl = document.createElement("div");
+  seedEl.className = "bracket-team-seed";
+  seedEl.textContent = `#${team.seed}`;
+  
+  const mascotEl = document.createElement("div");
+  mascotEl.className = "bracket-team-mascot";
+  mascotEl.textContent = team.mascot;
+  
+  const schoolEl = document.createElement("div");
+  schoolEl.className = "bracket-team-school";
+  schoolEl.textContent = team.school;
+  
+  if (isChamp) {
+    teamEl.className = "championship-team winner-team";
+    seedEl.className = "championship-team-seed";
+    mascotEl.className = "championship-team-mascot";
+    schoolEl.className = "championship-team-school";
+  }
+  
+  teamEl.appendChild(seedEl);
+  teamEl.appendChild(mascotEl);
+  teamEl.appendChild(schoolEl);
+  
+  return teamEl;
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

@@ -26,7 +26,7 @@ const TEAMS = [
   { id: "alabama_st",    school: "Alabama State",  mascot: "Hornets",       seed: 16, region: "South", image: null },
 
   // ===== EAST REGION =====
-  { id: "duke",          school: "Duke",           mascot: "Blue Devils",   seed: 1,  region: "East", image: null },
+  { id: "duke",          school: "Duke",           mascot: "Blue Devils",   seed: 1,  region: "East", image: "images/bluedevil.jpg" },
   { id: "alabama",       school: "Alabama",        mascot: "Crimson Tide",  seed: 2,  region: "East", image: null },
   { id: "wisconsin",     school: "Wisconsin",      mascot: "Badgers",       seed: 3,  region: "East", image: null },
   { id: "arizona",       school: "Arizona",        mascot: "Wildcats",      seed: 4,  region: "East", image: null },
