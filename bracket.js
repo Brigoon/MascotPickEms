@@ -80,49 +80,24 @@ const TEAMS = [
   { id: "norfolk_state", school: "Norfolk State",  mascot: "Spartans",      seed: 16, region: "West", image: null },
 ];
 
-// First-round matchups: [higherSeedId, lowerSeedId]
-// Standard bracket format: 1v16, 8v9, 5v12, 4v13, 6v11, 3v14, 7v10, 2v15
-const FIRST_ROUND_MATCHUPS = [
-  // SOUTH
-  ["auburn",       "alabama_st"],
-  ["louisville",   "creighton"],
-  ["michigan",     "ucsd"],
-  ["texas_am",     "yale"],
-  ["ole_miss",     "nc_state"],
-  ["iowa_state",   "lipscomb"],
-  ["marquette",    "new_mexico"],
-  ["michigan_st",  "bryant"],
+// Generate first-round matchups dynamically based on March Madness bracket format
+// Standard bracket: 1v16, 2v15, 3v14, 4v13, 5v12, 6v11, 7v10, 8v9
+function generateFirstRoundMatchups() {
+  const regions = [...new Set(TEAMS.map(t => t.region))].sort();
+  const matchups = [];
+  
+  regions.forEach(region => {
+    const regionTeams = TEAMS.filter(t => t.region === region).sort((a, b) => a.seed - b.seed);
+    // Pair seeds: (1,16), (2,15), (3,14), (4,13), (5,12), (6,11), (7,10), (8,9)
+    for (let i = 0; i < 8; i++) {
+      matchups.push([regionTeams[i].id, regionTeams[15 - i].id]);
+    }
+  });
+  
+  return matchups;
+}
 
-  // EAST
-  ["duke",         "mount_st_marys"],
-  ["miss_state",   "baylor"],
-  ["oregon",       "liberty"],
-  ["arizona",      "akron"],
-  ["byu",          "vcu"],
-  ["wisconsin",    "montana"],
-  ["saint_marys",  "vanderbilt"],
-  ["alabama",      "robert_morris"],
-
-  // MIDWEST
-  ["houston",      "siue"],
-  ["gonzaga",      "georgia"],
-  ["clemson",      "mcneese"],
-  ["purdue",       "high_point"],
-  ["illinois",     "xavier_win"],
-  ["kentucky",     "troy"],
-  ["ucla",         "utah_state"],
-  ["tennessee",    "wofford"],
-
-  // WEST
-  ["florida",      "norfolk_state"],
-  ["uconn",        "oklahoma"],
-  ["memphis",      "colorado_st"],
-  ["maryland",     "grand_canyon"],
-  ["missouri",     "drake"],
-  ["texas_tech",   "unc_wilmington"],
-  ["kansas",       "arkansas"],
-  ["st_johns",     "omaha"],
-];
+const FIRST_ROUND_MATCHUPS = generateFirstRoundMatchups();
 
 // Helper: look up a team by id
 function getTeam(id) {

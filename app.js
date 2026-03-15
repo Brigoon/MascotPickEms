@@ -29,12 +29,9 @@ function resetState() {
 }
 
 // ─── Bracket Logic ────────────────────────────────────────────────────────────
-// Build the matchup queue for a given round.
-// Round 1: use FIRST_ROUND_MATCHUPS from bracket.js
-// Later rounds: pair up winners from previous round in order
 function getMatchupsForRound(round) {
   if (round === 1) {
-    return FIRST_ROUND_MATCHUPS.map(([a, b]) => [a, b]);
+    return FIRST_ROUND_MATCHUPS;
   }
   const prevMatchups = getMatchupsForRound(round - 1);
   const result = [];
@@ -49,7 +46,6 @@ function getMatchupsForRound(round) {
 }
 
 function matchupKey([a, b]) {
-  // Stable key regardless of pick order
   return [a, b].sort().join("__vs__");
 }
 
@@ -83,6 +79,38 @@ function recordPick(winnerId) {
   saveState();
 }
 
+function goBack() {
+  if (completedMatchups() === 0) return; // nothing to undo
+
+  if (state.done) {
+    // Was on the complete screen — step back into the championship game
+    state.done = false;
+    state.round = 6;
+    state.matchupIndex = 0;
+  } else if (state.matchupIndex === 0 && state.round > 1) {
+    // At the first game of a later round — go back to last game of previous round
+    state.round--;
+    state.matchupIndex = getMatchupsForRound(state.round).length - 1;
+  } else {
+    // Mid-round — just step back one game
+    state.matchupIndex--;
+  }
+
+  // Erase the pick for the matchup we just stepped back to
+  const matchup = currentMatchup();
+  if (matchup) {
+    delete state.picks[matchupKey(matchup)];
+  }
+
+  saveState();
+
+  // Make sure matchup view is visible (in case we backed out of the complete screen)
+  document.getElementById("matchup-view").style.display = "flex";
+  document.getElementById("complete-view").style.display = "none";
+
+  renderMatchup();
+}
+
 function getChampion() {
   if (!state.done) return null;
   const finalMatchups = getMatchupsForRound(6);
@@ -100,7 +128,6 @@ function completedMatchups() {
 
 // ─── UI ───────────────────────────────────────────────────────────────────────
 function placeholderSVG(team) {
-  // Generate a unique color per team based on mascot name
   const colors = [
     ["#1a3a6b","#e8c84e"], ["#8b1a1a","#f5f5f5"], ["#0d5c3a","#ffd700"],
     ["#1f4b8e","#e87c1a"], ["#4a1a6e","#c5a028"], ["#0a4c2b","#d4af37"],
@@ -128,6 +155,11 @@ function progressPercent() {
   return Math.round((completedMatchups() / totalMatchups()) * 100);
 }
 
+function updateBackButton() {
+  const btn = document.getElementById("back-btn");
+  if (btn) btn.disabled = completedMatchups() === 0;
+}
+
 function renderMatchup() {
   const matchup = currentMatchup();
 
@@ -137,7 +169,6 @@ function renderMatchup() {
   }
 
   if (!matchup) {
-    // Shouldn't happen, but safety net
     renderComplete();
     return;
   }
@@ -155,29 +186,28 @@ function renderMatchup() {
   document.getElementById("progress-bar").style.width = progressPercent() + "%";
   document.getElementById("progress-text").textContent = `${completedMatchups()} / ${totalMatchups()} games picked`;
 
-  // Team A
   renderTeamCard("card-a", teamA, idA);
-  // Team B
   renderTeamCard("card-b", teamB, idB);
 
-  // VS label
   document.getElementById("vs-label").style.display = "flex";
+
+  updateBackButton();
 
   // Animate in
   const arena = document.getElementById("arena");
   arena.classList.remove("slide-in");
-  void arena.offsetWidth; // reflow
+  void arena.offsetWidth;
   arena.classList.add("slide-in");
 }
 
 function renderTeamCard(cardId, team, teamId) {
   const card = document.getElementById(cardId);
+  card.classList.remove("winner", "loser");
+  card.style.cssText = ""; // clear all inline styles
   card.onclick = () => handlePick(teamId);
   card.querySelector(".mascot-img").src = getMascotImage(team);
   card.querySelector(".mascot-img").alt = team.mascot;
   card.querySelector(".mascot-name").textContent = team.mascot;
-  card.querySelector(".school-name").textContent = team.school;
-  card.classList.remove("winner", "loser");
 }
 
 function handlePick(winnerId) {
@@ -187,11 +217,14 @@ function handlePick(winnerId) {
   const [idA, idB] = matchup;
   const loserId = winnerId === idA ? idB : idA;
 
-  // Animate win/loss
   const winCard = winnerId === idA ? document.getElementById("card-a") : document.getElementById("card-b");
   const loseCard = loserId === idA ? document.getElementById("card-a") : document.getElementById("card-b");
   winCard.classList.add("winner");
   loseCard.classList.add("loser");
+
+  // Disable cards during animation to prevent double-picks
+  document.getElementById("card-a").onclick = null;
+  document.getElementById("card-b").onclick = null;
 
   setTimeout(() => {
     recordPick(winnerId);
@@ -213,49 +246,16 @@ function renderComplete() {
     document.getElementById("champion-school").textContent = champion.school;
   }
 
-  // Build bracket summary table
-  renderBracketSummary();
-}
-
-function renderBracketSummary() {
-  const container = document.getElementById("bracket-summary");
-  container.innerHTML = "";
-
-  const regions = ["South", "East", "Midwest", "West"];
-  regions.forEach(region => {
-    const section = document.createElement("div");
-    section.className = "region-summary";
-    section.innerHTML = `<h3>${region}</h3>`;
-
-    // Show each round's winner from this region
-    // R1 matchups 0-7 = South, 8-15 = East, 16-23 = Midwest, 24-31 = West
-    const regionIdx = regions.indexOf(region);
-    const r1Matchups = FIRST_ROUND_MATCHUPS.slice(regionIdx * 8, regionIdx * 8 + 8);
-
-    const rows = [];
-
-    // Round 1 results
-    r1Matchups.forEach(matchup => {
-      const key = matchupKey(matchup);
-      const winner = state.picks[key];
-      if (winner) {
-        const wt = getTeam(winner);
-        const loser = getTeam(matchup[0] === winner ? matchup[1] : matchup[0]);
-        rows.push(`<tr><td>R64</td><td>✓ ${wt.mascot}</td><td class="loser-cell">✗ ${loser.mascot}</td></tr>`);
-      }
-    });
-
-    const table = document.createElement("table");
-    table.className = "summary-table";
-    table.innerHTML = `<thead><tr><th>Rd</th><th>Winner</th><th>Eliminated</th></tr></thead><tbody>${rows.join("")}</tbody>`;
-    section.appendChild(table);
-    container.appendChild(section);
-  });
+  // Update progress bar to show 63/63
+  document.getElementById("progress-bar").style.width = progressPercent() + "%";
+  document.getElementById("progress-text").textContent = `${completedMatchups()} / ${totalMatchups()} games picked`;
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
+
+  document.getElementById("back-btn").addEventListener("click", goBack);
 
   document.getElementById("reset-btn").addEventListener("click", () => {
     if (confirm("Start over? All picks will be lost.")) {
