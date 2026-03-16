@@ -161,10 +161,12 @@ main#matchup-view {
   min-width: 0;
 }
 
-.team-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: var(--accent);
-  box-shadow: 0 6px 24px rgba(245, 166, 35, 0.2);
+@media (hover: hover) {
+  .team-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--accent);
+    box-shadow: 0 6px 24px rgba(245, 166, 35, 0.2);
+  }
 }
 
 .team-card:active {
@@ -369,7 +371,9 @@ main#complete-view {
   border-radius: var(--radius);
   width: 100%;
   max-height: none;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: visible;
+  min-width: 0;
 }
 
 .region-bracket {
@@ -673,6 +677,21 @@ main#complete-view {
     min-width: 95px;
   }
 }
+
+@media (max-width: 480px) {
+  .bracket-view {
+    min-width: 700px;
+  }
+
+  main#complete-view {
+    overflow-x: auto;
+  }
+
+  .complete-inner {
+    min-width: 0;
+  }
+}
+
 .bracket-section {
   width: 100%;
 }
@@ -805,6 +824,7 @@ main#complete-view {
     gap: 0;
     height: calc(100vh - 140px);
     padding: 0;
+    align-items: stretch;
   }
   .team-card { 
     flex: 1;
@@ -814,6 +834,7 @@ main#complete-view {
     border-bottom: 2px solid var(--border);
     justify-content: center;
     gap: 0.5rem;
+    width: 100%;
   }
   .team-card:last-of-type {
     border-bottom: none;
