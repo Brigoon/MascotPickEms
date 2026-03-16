@@ -36,12 +36,40 @@ function resolvePlayIn(teamId) {
   return state.picks[key] || teamId;
 }
 
+function getFinalFourRegionWinners() {
+  const eliteEightMatchups = getMatchupsForRound(4);
+  const regionWinners = {};
+
+  eliteEightMatchups.forEach(matchup => {
+    const winner = state.picks[matchupKey(matchup)];
+    if (!winner) return;
+    const team = getTeam(winner);
+    if (!team || !team.region) return;
+    regionWinners[team.region] = winner;
+  });
+
+  return regionWinners;
+}
+
 function getMatchupsForRound(round) {
   if (round === 0) {
     return FIRST_FOUR_MATCHUPS;
   }
   if (round === 1) {
     return FIRST_ROUND_MATCHUPS.map(([a, b]) => [resolvePlayIn(a), resolvePlayIn(b)]);
+  }
+  if (round === 5) {
+    const regionWinners = getFinalFourRegionWinners();
+    const semifinalMatchups = [];
+
+    if (regionWinners.East && regionWinners.South) {
+      semifinalMatchups.push([regionWinners.East, regionWinners.South]);
+    }
+    if (regionWinners.West && regionWinners.Midwest) {
+      semifinalMatchups.push([regionWinners.West, regionWinners.Midwest]);
+    }
+
+    return semifinalMatchups;
   }
   const prevMatchups = getMatchupsForRound(round - 1);
   const result = [];

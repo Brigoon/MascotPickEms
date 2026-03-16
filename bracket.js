@@ -61,7 +61,6 @@ const TEAMS = [
   { id: "idaho",       school: "Idaho",          mascot: "Joe Vandal",    seed: 15, region: "South", image: "images/joevandal.jpg" },
   { id: "ff_s16",      school: "n/a",            mascot: "n/a",           seed: 16, region: "South", image: null },
 
-
   /* ========= MIDWEST ======== */
   { id: "michigan",     school: "Michigan",        mascot: "Wolverine",             seed: 1,  region: "Midwest", image: "images/wolverine.jpg" },
   { id: "iowa_state",   school: "Iowa State",      mascot: "Cy",                    seed: 2,  region: "Midwest", image: "images/cy.jpg" },
